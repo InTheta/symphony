@@ -43,6 +43,14 @@ defmodule SymphonyElixir.CLITest do
     refute_received :started
   end
 
+  test "usage includes the required acknowledgement flag without starting the runtime" do
+    assert {:error, message} = CLI.evaluate(["--unknown-option"], %{})
+    assert message =~ "Usage: symphony #{@ack_flag} "
+    assert message =~ "[--logs-root <path>]"
+    assert message =~ "[--port <port>]"
+    assert message =~ "[path-to-WORKFLOW.md]"
+  end
+
   test "defaults to WORKFLOW.md when workflow path is missing" do
     deps = %{
       file_regular?: fn path -> Path.basename(path) == "WORKFLOW.md" end,
