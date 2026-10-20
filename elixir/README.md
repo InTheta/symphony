@@ -74,6 +74,20 @@ mise exec -- mix build
 mise exec -- ./bin/symphony ./WORKFLOW.md
 ```
 
+## Dependency security checks
+
+Install the committed lockfile with `mix setup`; run `mix hex.audit` to check locked packages
+against the current Hex security advisories. After updating dependencies, run `make all` as well as
+the audit before building a release.
+
+The HTTP stack requires patched Bandit, Phoenix, LiveView, and Req releases. The lockfile also
+uses Decimal 3 with compatible Ecto, Jason, and Solid versions; update these together to preserve
+dependency compatibility.
+
+Ecto 3.14 uses the changeset's configured empty values for required-field validation.
+The Codex command keeps explicit blank-string validation because its cast preserves empty values;
+omitting the command still uses the default, while empty and whitespace-only commands are rejected.
+
 ## Burrito releases
 
 Symphony ships self-contained executables built with
